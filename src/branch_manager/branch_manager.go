@@ -39,14 +39,24 @@ func Commit(repo *git.Repository){
     idx.Write()
     treeId, err := idx.WriteTree()
     tree, err := repo.LookupTree(treeId)
+    loc, err := time.LoadLocation("Europe/Berlin")
+    fmt.Println(444, loc, err)
     sig := &git.Signature{
         Name: "test",
         Email: "test@163.com",
-        When: time.Now(),
+        When: time.Date(2013, 03, 06, 14, 30, 0, 0, loc),
     }
-    commitId, err := repo.CreateCommit("HEAD", sig, sig, "ss", tree)
+    ref, err := repo.References.Lookup("HEAD")
+    fmt.Println(50, ref, err)
 
-    fmt.Println(err, commitId)
+    parent, err := ref.Peel(git.ObjectCommit)
+    fmt.Println(parent, err)
+
+    parenCommit, err := parent.AsCommit()
+    fmt.Println(parenCommit, err)
+    commitId, err := repo.CreateCommit("HEAD", sig, sig, "ss", tree, parenCommit)
+
+    fmt.Println(err.Error(), commitId)
     log.Println("123")
     fmt.Println("123123")
 }
