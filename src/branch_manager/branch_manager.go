@@ -56,7 +56,7 @@ func Commit(repo *git.Repository){
     fmt.Println(70, parenCommit, err)
     commitId, err := repo.CreateCommit("HEAD", sig, sig, "ss", tree, parenCommit)
 
-    fmt.Println(err.Error(), commitId)
+    fmt.Println(80, err, commitId)
     log.Println("123")
     fmt.Println("123123")
 }
