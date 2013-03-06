@@ -50,10 +50,10 @@ func Commit(repo *git.Repository){
     fmt.Println(50, ref, err)
 
     parent, err := ref.Peel(git.ObjectCommit)
-    fmt.Println(parent, err)
+    fmt.Println(60, parent, err)
 
     parenCommit, err := parent.AsCommit()
-    fmt.Println(parenCommit, err)
+    fmt.Println(70, parenCommit, err)
     commitId, err := repo.CreateCommit("HEAD", sig, sig, "ss", tree, parenCommit)
 
     fmt.Println(err.Error(), commitId)
