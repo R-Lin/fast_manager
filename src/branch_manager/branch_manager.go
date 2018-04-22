@@ -28,7 +28,7 @@ func AddFiles(idx *git.Index, pathes []string){
     }
 }
 
-func Commit(repo *git.Repository){
+func Commit(repo *git.Repository, commitMesg string){
     pathList, err := ShowRepoStatus(repo)
     fmt.Println(pathList)
     idx, err := repo.Index()
@@ -39,26 +39,36 @@ func Commit(repo *git.Repository){
     idx.Write()
     treeId, err := idx.WriteTree()
     tree, err := repo.LookupTree(treeId)
-    loc, err := time.LoadLocation("Europe/Berlin")
-    fmt.Println(444, loc, err)
+    // loc, err := time.LoadLocation("Asia/Shanghai")
+    if err != nil{
+        fmt.Println("set timezone err", err.Error())
+    }
     sig := &git.Signature{
         Name: "test",
         Email: "test@163.com",
-        When: time.Date(2013, 03, 06, 14, 30, 0, 0, loc),
+        When: time.Now(),
     }
     ref, err := repo.References.Lookup("HEAD")
-    fmt.Println(50, ref, err)
+    if err != nil{
+        fmt.Println("Get Head ref error", err.Error())
+    }
 
     parent, err := ref.Peel(git.ObjectCommit)
-    fmt.Println(60, parent, err)
+    if err != nil{
+        fmt.Println("Get parent id error", err.Error())
+    }
+
 
     parenCommit, err := parent.AsCommit()
-    fmt.Println(70, parenCommit, err)
-    commitId, err := repo.CreateCommit("HEAD", sig, sig, "ss", tree, parenCommit)
-
-    fmt.Println(80, err, commitId)
-    log.Println("123")
-    fmt.Println("123123")
+    if err != nil{
+        fmt.Println("Get parent commiter error", err.Error())
+    }
+    commitId, err := repo.CreateCommit("HEAD", sig, sig, 
+        commitMesg, tree, parenCommit)
+    if err != nil{
+        fmt.Println("Commiter error", err.Error())
+    }
+    log.Println("asd", commitId)
 }
 
 func ShowRepoStatus(repo *git.Repository)([]string, error){
@@ -101,6 +111,6 @@ func main(){
     }
     fmt.Println(status)
     name, err := ShowCurrentBranch(name2repo["test"])
-    Commit(name2repo["test"])
+    Commit(name2repo["test"], "测试提交")
     fmt.Println(name, err)
 }
