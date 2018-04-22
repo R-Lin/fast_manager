@@ -9,7 +9,7 @@ import (
 )
 
 var PATH string = "/Users/lin_r/Desktop/project/go/fast_manager"
-// var PATH string = "/Users/lin_r/Desktop/project/go/fast_manager"
+// var PATH string = "/Users/lin_r/Desktop/company_pro/detect/detect-server"
 var name2repo map[string]*git.Repository = make(map[string]*git.Repository)
 
 func ShowCurrentBranch(repo *git.Repository)(string, error){
