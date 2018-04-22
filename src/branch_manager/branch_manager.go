@@ -70,11 +70,7 @@ func Commit(repo *git.Repository, commitMesg string){
 }
 
 func Push(repo *git.Repository){
-    reference, err := repo.Head()
-    if err != nil{
-        fmt.Println("push error", err.Error())
-    }
-    remote, err := repo.Remotes.Lookup(reference.Name())
+    remote, err := repo.Remotes.Lookup("master")
     fmt.Println(remote, err)
     
 }
