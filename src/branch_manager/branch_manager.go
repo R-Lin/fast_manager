@@ -4,9 +4,12 @@ import (
     git "github.com/libgit2/git2go"
 //    "errors"
     "fmt"
+    "log"
+    "time"
 )
 
 var PATH string = "/Users/lin_r/Desktop/project/go/fast_manager"
+// var PATH string = "/Users/lin_r/Desktop/project/go/fast_manager"
 var name2repo map[string]*git.Repository = make(map[string]*git.Repository)
 
 func ShowCurrentBranch(repo *git.Repository)(string, error){
@@ -19,33 +22,10 @@ func ShowCurrentBranch(repo *git.Repository)(string, error){
     return branch.Name()
 }
 
-// func GetHeadBranch(repo *git.Repository)(string, error){
-//     branchIterator, err := repo.NewBranchIterator(git.BranchLocal)
-//     defer branchIterator.Free()
-//     if err != nil{
-//         fmt.Println(err.Error())
-//     }
-//     for {
-//         branch, _, err := branchIterator.Next()
-//         if err != nil{
-//             return "No", errors.New("branch list end")
-//         }
-//         isHead, err := branch.IsHead()
-//         if err != nil{
-//             fmt.Println(err.Error())
-//         }
-//         if isHead{
-//             branchName, err := branch.Name()
-//             return branchName, err
-//         }
-//     }
-// }
 func AddFiles(idx *git.Index, pathes []string){
     for _, path := range pathes{
         idx.AddByPath(path)
     }
-    idx.Write()
-    idx.WriteTree()
 }
 
 func Commit(repo *git.Repository){
@@ -56,7 +36,18 @@ func Commit(repo *git.Repository){
         fmt.Println(err.Error)
     }
     AddFiles(idx, pathList)
-    fmt.Println(err)
+    idx.Write()
+    treeId, err := idx.WriteTree()
+    tree, err := repo.LookupTree(treeId)
+    sig := &git.Signature{
+        Name: "test",
+        Email: "test@163.com",
+        When: time.Now(),
+    }
+    commitId, err := repo.CreateCommit("HEAD", sig, sig, "ss", tree)
+
+    fmt.Println(err, commitId)
+    log.Println("123")
     fmt.Println("123123")
 }
 
