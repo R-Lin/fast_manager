@@ -57,8 +57,6 @@ func Commit(repo *git.Repository, commitMesg string){
     if err != nil{
         fmt.Println("Get parent id error", err.Error())
     }
-
-
     parenCommit, err := parent.AsCommit()
     if err != nil{
         fmt.Println("Get parent commiter error", err.Error())
@@ -71,6 +69,15 @@ func Commit(repo *git.Repository, commitMesg string){
     log.Println("asd", commitId)
 }
 
+func Push(repo *git.Repository){
+    reference, err := repo.Head()
+    if err != nil{
+        fmt.Println("push error", err.Error())
+    }
+    remote, err := repo.Remotes.Lookup(reference.Name())
+    fmt.Println(remote, err)
+    
+}
 func ShowRepoStatus(repo *git.Repository)([]string, error){
     /*
     显示指定仓库的文件状态
