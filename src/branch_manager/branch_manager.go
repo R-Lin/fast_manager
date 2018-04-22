@@ -70,7 +70,7 @@ func Commit(repo *git.Repository, commitMesg string){
 }
 
 func Push(repo *git.Repository){
-    remote, err := repo.Remotes.Lookup("master")
+    remote, err := repo.Remotes.Lookup("origin")
     fmt.Println(remote, err)
     
 }
