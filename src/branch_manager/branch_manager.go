@@ -119,5 +119,6 @@ func main(){
     fmt.Println(status)
     name, err := ShowCurrentBranch(name2repo["test"])
     Commit(name2repo["test"], "测试提交")
+    Push(name2repo["test"])
     fmt.Println(name, err)
 }
