@@ -76,6 +76,7 @@ func Push(repo *git.Repository){
         fmt.Println("push error", err.Error())
     }
     remote, err := repo.Remotes.Lookup("origin")
+    fmt.Println(1111, remote.Url())
     err = remote.Push([]string{reference.Name()}, &pushOption)
     fmt.Println(err.Error())
 }
