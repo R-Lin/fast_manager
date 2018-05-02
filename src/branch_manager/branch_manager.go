@@ -1,4 +1,4 @@
-package main
+package branch_manager
 
 import (
     git "github.com/libgit2/git2go"
@@ -39,7 +39,6 @@ func Commit(repo *git.Repository, commitMesg string){
     idx.Write()
     treeId, err := idx.WriteTree()
     tree, err := repo.LookupTree(treeId)
-    // loc, err := time.LoadLocation("Asia/Shanghai")
     if err != nil{
         fmt.Println("set timezone err", err.Error())
     }
@@ -61,7 +60,7 @@ func Commit(repo *git.Repository, commitMesg string){
     if err != nil{
         fmt.Println("Get parent commiter error", err.Error())
     }
-    commitId, err := repo.CreateCommit("HEAD", sig, sig, 
+    commitId, err := repo.CreateCommit("HEAD", sig, sig,
         commitMesg, tree, parenCommit)
     if err != nil{
         fmt.Println("Commiter error", err.Error())
@@ -69,6 +68,7 @@ func Commit(repo *git.Repository, commitMesg string){
     log.Println("asd", commitId)
 }
 
+/*
 func Push(repo *git.Repository){
     reference, err := repo.Head()
     pushOption := git.PushOptions{}
@@ -79,6 +79,8 @@ func Push(repo *git.Repository){
     err = remote.Push([]string{reference.Name()}, &pushOption)
     fmt.Println(err.Error())
 }
+*/
+
 func ShowRepoStatus(repo *git.Repository)([]string, error){
     /*
     显示指定仓库的文件状态
@@ -120,6 +122,5 @@ func main(){
     fmt.Println(status)
     name, err := ShowCurrentBranch(name2repo["test"])
     Commit(name2repo["test"], "测试提交")
-    Push(name2repo["test"])
     fmt.Println(name, err)
 }

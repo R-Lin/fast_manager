@@ -2,6 +2,8 @@ package main
 
 import (
     "./docker_manager"
+    "./mongo_manager"
+    "./branch_manager"
     // "github.com/kr/pty"
     "io/ioutil"
     "time"

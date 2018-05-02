@@ -1,3 +1,5 @@
-github.com/kr/pty
+go get github.com/kr/pty
 brew install libgit2
 go get github.com/libgit2/git2go
+go get gopkg.in/yaml.v2
+go get gopkg.in/mgo.v2
