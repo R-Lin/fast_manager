@@ -2,6 +2,7 @@ package http_manager
 
 import (
     "../mongo_manager"
+    "../docker_manager"
     "os"
     "gopkg.in/mgo.v2/bson"
     "net/http"
@@ -29,7 +30,9 @@ func TaskAdd(w http.ResponseWriter, r *http.Request){
 
 // 容器查看
 func DockerList(w http.ResponseWriter, r *http.Request){
-    w.Write([]byte("Hello"))
+    ss := docker_manager.ShowContainerList()
+    w.Header().Add("Content-Type", "application/json")
+    w.Write([]byte(Data2reponse(ss, 33)))
 }
 
 // 增加容器
@@ -42,9 +45,18 @@ func DockerAdd(w http.ResponseWriter, r *http.Request){
 // 代码库查看
 func CodeList(w http.ResponseWriter, r *http.Request){
     logger.Println(r.Method, r.URL, r.Proto, r.ContentLength, r.Host)
+    codelist := make([]map[string]interface{}, 0)
     result := MongoDb.Find(MongoDb.CodeCol, bson.M{})
-    logger.Println(result)
-    w.Write([]byte("Hello"))
+    total := 0
+    for _, item := range result{
+        total++
+        codelist = append(codelist, map[string]interface{}{
+            "codepath": item["codepath"],
+            "codename": item["codename"],
+        })
+    }
+    w.Header().Add("Content-Type", "application/json")
+    w.Write([]byte(Data2reponse(codelist, total)))
 }
 
 // 增加代码库

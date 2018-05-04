@@ -21,20 +21,24 @@ type ContainerType struct{
     Status      string
 }
 
-func ShowContainerList()[]ContainerType{
+func ShowContainerList()[]map[string]ContainerType{
     containers, err := CLIENT.ContainerList(CTX, types.ContainerListOptions{})
     if err != nil{
         fmt.Println(err.Error())
     }
-    formateContains := make([]ContainerType, len(containers))
-    for i, obj := range containers {
-        formateContains[i] = ContainerType{
+    formateContains := make([]map[string]ContainerType, 0)
+    for _, obj := range containers {
+        container := ContainerType{
             obj.ID,
             obj.Names,
             obj.Created,
             obj.Ports,
             obj.State,
-            obj.Status}
+            obj.Status,
+        }
+        formateContains = append(formateContains, map[string]ContainerType{
+            obj.ID: container,
+        })
     }
     return formateContains
 }

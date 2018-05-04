@@ -14,6 +14,16 @@ func GetPostData(r *http.Request) map[string]interface{}{
     result := make(map[string]interface{})
     json.Unmarshal(body, &result)
     return result
+}
 
-
+func Data2reponse(data interface{}, itemCnt int)string {
+    result, err := json.Marshal(map[string]interface{}{
+        "items": data,
+        "total": itemCnt,
+    })
+    if err != nil{
+        fmt.Println(err.Error())
+        return "Data2reponse Error: " + err.Error()
+    }
+    return string(result)
 }
